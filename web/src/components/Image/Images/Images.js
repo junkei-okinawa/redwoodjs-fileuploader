@@ -58,8 +58,9 @@ const ImagesList = ({ images }) => {
     awaitRefetchQueries: true,
   })
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete image ' + id + '?')) {
+  const onDeleteClick = (image) => {
+    if (confirm('Are you sure you want to delete image \ntitle: ' + image.title + '\n   id: ' + image.id + '\n' + '?')) {
+      const id = image.id;
       deleteImage({ variables: { id } })
     }
   }
@@ -105,7 +106,7 @@ const ImagesList = ({ images }) => {
                     type="button"
                     title={'Delete image ' + image.id}
                     className="rw-button rw-button-small rw-button-red"
-                    onClick={() => onDeleteClick(image.id)}
+                    onClick={() => onDeleteClick(image)}
                   >
                     Delete
                   </button>

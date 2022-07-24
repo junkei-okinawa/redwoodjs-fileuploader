@@ -56,8 +56,9 @@ const Image = ({ image }) => {
     },
   })
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete image ' + id + '?')) {
+  const onDeleteClick = (image) => {
+    if (confirm('Are you sure you want to delete image \n' + image.title + '\n' + image.id + '\n' + '?')) {
+      const id = image.id;
       deleteImage({ variables: { id } })
     }
   }
@@ -103,7 +104,7 @@ const Image = ({ image }) => {
         <button
           type="button"
           className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(image.id)}
+          onClick={() => onDeleteClick(image)}
         >
           Delete
         </button>

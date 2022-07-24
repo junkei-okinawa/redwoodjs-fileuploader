@@ -6,13 +6,22 @@ import {
   TextField,
   Submit,
 } from '@redwoodjs/forms'
-import { PickerInline } from 'filestack-react'
+import { PickerInline } from 'filestack-react' //  There is a known error => https://github.com/filestack/filestack-react/issues/116
+import FilestackPicker from 'src/components/FilestackPicker' // Instead, create your own component(FilestackPicker) described in the above Issue and support it.
 import { useState } from 'react'
 
 const formatDatetime = (value) => {
   if (value) {
     return value.replace(/:\d{2}\.\d{3}\w/, '')
   }
+}
+
+const clientOptions = () => {
+  const expiry = int(time.time()) + 15 * 60; // Policy is valid for 15 minutes
+  const jsonPolicy = { 'call': [], 'expiry': expiry };
+  const security = filestack.getSecurity(jsonPolicy, process.env.REDWOOD_ENV_FILESTACK_SECRET);
+  security['policy'] = security['policy'].decode('ascii');
+  return security
 }
 
 const ImageForm = (props) => {
@@ -54,13 +63,20 @@ const ImageForm = (props) => {
 
         <FieldError name="title" className="rw-field-error" />
 
-        <PickerInline
+        {/* <PickerInline
           apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
           onSuccess={onFileUpload}
         >
           <div style={{ display: url ? 'none' : 'block', height: '500px' }}></div>
-        </PickerInline>
+        </PickerInline> */}
 
+        <FilestackPicker
+          apikey={process.env.REDWOOD_ENV_FILESTACK_API_KEY}
+          clientOptions={clientOptions}
+          onSuccess={onFileUpload}
+        >
+          <div style={{ display: url ? 'none' : 'block', height: '500px' }}></div>
+        </FilestackPicker>
 
         {url && (
           <div>
